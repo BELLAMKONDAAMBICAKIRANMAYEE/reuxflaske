@@ -2,7 +2,7 @@ import { createSlice,createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 export const fetchProducts=createAsyncThunk(
    "products/fetchProducts",async function(){
-   const res=await axios.get('http://3.92.240.108/api/products')
+   const res=await axios.get('https://fakestoreapi.com/products')
     console.log(res.data)
        return res.data
       
@@ -21,7 +21,7 @@ const ProductSlice=createSlice({
         })
          builder.addCase(fetchProducts.fulfilled,(state,action)=>{
             state.loading=false
-            state.items=action.payload.products
+            state.items=action.payload
         })
          builder.addCase(fetchProducts.rejected,(state,action)=>{
             state.loading=false
