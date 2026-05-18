@@ -5,29 +5,11 @@ import axios from 'axios'
 function Navbar() {
 
   const navigate = useNavigate()
-
-  async function logout() {
-
-    try {
-
-      const res = await axios.post(
-        "https://ecomflask.duckdns.org/api/admin/logout",
-        {},
-        {
-          withCredentials: true   // ✅ REQUIRED
-        }
-      )
-
-      console.log(res.data)
-
-      alert(res.data.message || "Logout Successful")
-
-      navigate("/login")
-
-    } catch (error) {
-      console.log(error.response?.data || error.message)
-      alert("Logout Failed")
-    }
+const user=JSON.parse(localStorage.getItem('admin'))
+ function logout() {
+localStorage.removeItem('admin')
+navigate('/login')
+    
   }
 
   return (
@@ -64,18 +46,22 @@ function Navbar() {
       </Link>
 
       {/* AUTH LINKS */}
-      <Link to="/login" style={{ color: "white", textDecoration: "none" }}>
+      {
+        !user?
+        (<><Link to="/login" style={{ color: "white", textDecoration: "none" }}>
         Login
       </Link>
 
       <Link to="/register" style={{ color: "white", textDecoration: "none" }}>
         Register
       </Link>
-
-      {/* Logout (session based) */}
+</>
+      ):
+        (
       <button onClick={logout}>
         Logout
-      </button>
+      </button>)
+      }
 
     </div>
   )
