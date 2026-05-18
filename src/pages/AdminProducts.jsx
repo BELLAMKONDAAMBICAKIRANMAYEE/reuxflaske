@@ -1,53 +1,54 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react"
+import axios from "axios"
+import { Link, useNavigate } from "react-router-dom"
 
 function AdminProducts() {
-  const [products, setProducts] = useState([]);
+
+  const [products, setProducts] = useState([])
+  const navigate = useNavigate()
 
   async function getProducts() {
     try {
-      const token = localStorage.getItem("token");
 
       const res = await axios.get(
         "https://ecomflask.duckdns.org/api/admin/items",
         {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          withCredentials: true   // 🔥 REQUIRED
         }
-      );
+      )
 
-      setProducts(res.data.products);
+      setProducts(res.data.products || res.data)
+
     } catch (error) {
-      console.log(error);
+      console.log(error.response?.data || error.message)
+
+      // if session expired → redirect
+      navigate("/login")
     }
   }
 
   async function deleteProduct(id) {
     try {
-      const token = localStorage.getItem("token");
 
       const res = await axios.delete(
-        `https://your-backend-url.com/api/admin/delete-item/${id}`,
+        `https://ecomflask.duckdns.org/api/admin/delete-item/${id}`,
         {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          withCredentials: true   // 🔥 REQUIRED
         }
-      );
+      )
 
-      alert(res.data.message);
+      alert(res.data.message)
 
-      getProducts();
+      getProducts()
+
     } catch (error) {
-      console.log(error);
+      console.log(error.response?.data || error.message)
     }
   }
 
   useEffect(() => {
-    getProducts();
-  }, []);
+    getProducts()
+  }, [])
 
   return (
     <div>
@@ -55,35 +56,24 @@ function AdminProducts() {
 
       {products.map((item) => (
         <div key={item.itemid}>
-          <img
-            src={item.image}
-            alt=""
-            width="150"
-          />
+
+          <img src={item.image} alt="" width="150" />
 
           <h2>{item.itemname}</h2>
-
           <p>{item.item_desc}</p>
-
           <h3>₹{item.price}</h3>
 
-          <Link to={`/single/${item.itemid}`}>
-            View
-          </Link>
+          <Link to={`/single/${item.itemid}`}>View</Link>
+          <Link to={`/edit/${item.itemid}`}>Edit</Link>
 
-          <Link to={`/edit/${item.itemid}`}>
-            Edit
-          </Link>
-
-          <button
-            onClick={() => deleteProduct(item.itemid)}
-          >
+          <button onClick={() => deleteProduct(item.itemid)}>
             Delete
           </button>
+
         </div>
       ))}
     </div>
-  );
+  )
 }
 
-export default AdminProducts;
+export default AdminProducts

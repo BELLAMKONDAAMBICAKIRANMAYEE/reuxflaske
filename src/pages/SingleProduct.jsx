@@ -15,7 +15,7 @@ function SingleProduct() {
         `https://ecomflask.duckdns.org/api/admin/item/${id}`,
         {
           headers: {
-            Authorization: `Bearer ${token}`,
+             withCredentials: true  
           },
         }
       );
