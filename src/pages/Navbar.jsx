@@ -27,7 +27,22 @@ navigate('/login')
         Home
       </Link>
 
-      <Link to="/products" style={{ color: "white", textDecoration: "none" }}>
+
+      {/* AUTH LINKS */}
+      {
+        !user?
+        (<><Link to="/login" style={{ color: "white", textDecoration: "none" }}>
+        Login
+      </Link>
+
+      <Link to="/register" style={{ color: "white", textDecoration: "none" }}>
+        Register
+      </Link>
+</>
+      ):
+        (
+          <>
+             <Link to="/products" style={{ color: "white", textDecoration: "none" }}>
         Products
       </Link>
 
@@ -44,23 +59,11 @@ navigate('/login')
       <Link to="/admin-products" style={{ color: "white", textDecoration: "none" }}>
         Admin Products
       </Link>
-
-      {/* AUTH LINKS */}
-      {
-        !user?
-        (<><Link to="/login" style={{ color: "white", textDecoration: "none" }}>
-        Login
-      </Link>
-
-      <Link to="/register" style={{ color: "white", textDecoration: "none" }}>
-        Register
-      </Link>
-</>
-      ):
-        (
       <button onClick={logout}>
         Logout
-      </button>)
+      </button>
+          </>
+   )
       }
 
     </div>
